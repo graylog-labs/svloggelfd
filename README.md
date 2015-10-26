@@ -44,5 +44,5 @@ exec svloggelfd -H 127.0.0.1:12201 -s elasticsearch -e | svlogd -tt /var/log/gra
 ```
   $ go get github.com/codegangsta/cli
   $ go get github.com/Graylog2/go-gelf/gelf
-  $ go build -o svloggelfd main.go
+  $ go build -o svloggelfd src/main.go
 ```
