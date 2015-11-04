@@ -36,8 +36,9 @@ func sendGelf() {
       line, err := stdinReader.ReadString('\n')
       if err != nil {
         time.Sleep(300 * time.Millisecond)
+      } else {
+        writer.Write([]byte(line))
       }
-      writer.Write([]byte(line))
     }
   }(w)
   go func(writer io.Writer){
@@ -46,8 +47,9 @@ func sendGelf() {
       line, err := stderrReader.ReadString('\n')
       if err != nil {
         time.Sleep(300 * time.Millisecond)
+      } else {
+        writer.Write([]byte(line))
       }
-      writer.Write([]byte(line))
     }
   }(w)
   reader := bufio.NewReader(r)
@@ -56,7 +58,7 @@ func sendGelf() {
   for true {
     line, err := reader.ReadString('\n')
     if err != nil {
-      log.Printf("Can not read from STDIN/STDERR: %s", err)
+      /* No data could be read from STDIN/STDERR */
       time.Sleep(300 * time.Millisecond)
       continue
     }
