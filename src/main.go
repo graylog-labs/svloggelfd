@@ -17,6 +17,7 @@ type Configuration struct {
   source   string
   facility string
   echo     bool
+  debug    bool
   tag      []string
 }
 var config Configuration
@@ -25,7 +26,7 @@ func sendGelf() {
   r, w := io.Pipe()
   stdoutWriter := bufio.NewWriter(os.Stdout)
   gelfWriter, err := gelf.NewWriter(config.address)
-  if err != nil {
+  if err != nil && config.debug {
     log.Printf("Can not create GELF connection: %s", err)
   }
 
@@ -66,11 +67,11 @@ func sendGelf() {
     /* additionally print log line back to STDOUT */
     if config.echo == true {
       _, err = stdoutWriter.WriteString(string(line))
-      if err != nil {
+      if err != nil && config.debug {
         log.Printf("Failed to write log message to STDOUT: %s", err)
       }
       err = stdoutWriter.Flush()
-      if err != nil {
+      if err != nil && config.debug {
         log.Printf("Failed to flush STDOUT buffer: %s", err)
       }
     }
@@ -90,7 +91,7 @@ func sendGelf() {
       Extra:    extraFields,
     }
 
-    if err := gelfWriter.WriteMessage(&m); err != nil {
+    if err := gelfWriter.WriteMessage(&m); err != nil && config.debug {
       log.Printf("gelf: cannot send GELF message: %v", err)
     }
   }
@@ -140,6 +141,10 @@ func main() {
 			Name:      "echo, e",
 			Usage:     "echo log messages back to STDOUT",
 		},
+    cli.BoolFlag{
+      Name:      "debug, d",
+      Usage:     "enable debug mode",
+    },
 	}
   app.Action = func(c *cli.Context) {
     config.address = c.String("host")
@@ -147,6 +152,7 @@ func main() {
     config.facility = c.String("facility")
     config.tag = parsedTag(c.String("tag"))
     config.echo = c.Bool("echo")
+    config.debug = c.Bool("debug")
     sendGelf()
   }
 	app.Run(os.Args)
