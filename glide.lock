@@ -1,0 +1,10 @@
+hash: d142a737e0699376b140767b81e6d139a8262dcf0e82d8db5b5d215c63868410
+updated: 2016-03-07T13:28:07.057982394+01:00
+imports:
+- name: github.com/codegangsta/cli
+  version: aca5b047ed14d17224157c3434ea93bf6cdaadee
+- name: github.com/Graylog2/go-gelf
+  version: aab2f594e4585d43468ac57287b0dece9d806883
+  subpackages:
+  - gelf
+devImports: []

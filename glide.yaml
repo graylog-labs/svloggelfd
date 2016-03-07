@@ -1,0 +1,6 @@
+package: github.com/Graylog2/svloggelfd
+import:
+- package: github.com/Graylog2/go-gelf
+  subpackages:
+  - gelf
+- package: github.com/codegangsta/cli
